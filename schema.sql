@@ -4,7 +4,6 @@ CREATE DATABASE employeeDB;
 
 USE employeeDB;
 
-
 CREATE TABLE department(
   id INT PRIMARY KEY,
   name VARCHAR(30) NOT NULL
@@ -19,8 +18,8 @@ CREATE TABLE role(
 
 CREATE TABLE employee(
   id INT PRIMARY KEY,
-  first name VARCHAR(30) NOT NULL,
-  last name VARCHAR(30) NOT NULL,
+  first name VARCHAR (30) NOT NULL,
+  last name VARCHAR (30) NOT NULL,
   role id INT 
   manager id INT NULL
 );

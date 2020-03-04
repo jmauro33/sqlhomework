@@ -1,8 +1,10 @@
-INSERT INTO (department, role, employee)
-VALUES ("", "", "");
+INSERT INTO employee (department, role, employee)
+VALUES ("IT", "Manager", "Alan");
 
-INSERT INTO (department, role, employee)
-VALUES ("", "", "");
+INSERT INTO department (department, role, employee)
+VALUES ("HR", "Director", "Julie");
 
-INSERT INTO (department, role, employee)
-VALUES ("", "", "");
+INSERT INTO role (department, role, employee)
+VALUES ("Marketing", "Associate", "Kevin");
+
+

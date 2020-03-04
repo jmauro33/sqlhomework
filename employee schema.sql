@@ -1,4 +1,3 @@
-DROP DATABASE IF EXISTS employeeDB;
 
 CREATE DATABASE employeeDB;
 
@@ -23,5 +22,16 @@ CREATE TABLE employee(
   role id INT 
   manager id INT NULL
 );
+
+USE employeeDB;
+
+INSERT INTO (department, role, employee)
+VALUES ("", "", "");
+
+INSERT INTO (department, role, employee)
+VALUES ("", "", "");
+
+INSERT INTO (department, role, employee)
+VALUES ("", "", "");
 
 

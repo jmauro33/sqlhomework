@@ -3,7 +3,6 @@ var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
   host: "localhost",
-
  
   port: 3306,
 
@@ -12,7 +11,7 @@ var connection = mysql.createConnection({
 
 
   password: "Viterbo",
-  database: "employeesDB"
+  database: "employeeDB"
 });
 
 connection.connect(function(err) {

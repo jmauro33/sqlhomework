@@ -39,7 +39,7 @@ function runSearch() {
         employeeSearch();
         break;
 
-      case "Find all employees who appear more than once":
+      case "Find employess by departments":
         multiSearch();
         break;
 
@@ -86,7 +86,7 @@ function multiSearch() {
 
     for (var i = 0; i < res.length; i++) {
       
-      console.log(res[i].artist);
+      console.log(res[i].name);
     }
     runSearch();
   });
@@ -130,8 +130,8 @@ function roleSearch() {
               res[i].department +
               " || role: " +
               res[i].role +
-              " || employee: " +
-              res[i].employee
+              " || name: " +
+              res[i].name
           );
         }
         runSearch();
@@ -147,7 +147,7 @@ function employeeSearch() {
       message: "What employee info would you like to look for?"
     })
     .then(function(answer) {
-      console.log(answer.song);
+      console.log(answer.department);
       connection.query("SELECT * FROM Employees WHERE ?", { department: answer.role }, function(err, res) {
         if (err) throw err;
         console.log(
@@ -157,8 +157,8 @@ function employeeSearch() {
             res[0].department +
             " || role: " +
             res[0].role +
-            " || employee: " +
-            res[0].employee
+            " || name: " +
+            res[0].name
         );
         runSearch();
       });

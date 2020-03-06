@@ -1,4 +1,4 @@
-
+name
 USE employeeDB;
 DROP TABLE IF EXISTS department;
 

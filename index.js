@@ -72,7 +72,7 @@ function employeeSearch() {
         for (var i = 0; i < res.length; i++) {
           console.log("Position: " + res[i].position + " || department: " + res[i].department + " || role: " + res[i].role);
         }
-      //  runSearch();
+  runSearch();
       });
     });
 }

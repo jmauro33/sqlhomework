@@ -1,10 +1,10 @@
-DROP DATABASE IF EXISTS employeeDB;
+
 USE employeeDB;
 
 CREATE TABLE department(
   id INT AUTO_INCREMENT, 
   department VARCHAR(30) NOT NULL,
-  PRIMARY KEY
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE role(
@@ -12,7 +12,7 @@ CREATE TABLE role(
   title VARCHAR(30) NOT NULL,
   salary DECIMAL(10,4) NULL,
   department_id INT NULL,
-  PRIMARY KEY
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE name(
@@ -21,7 +21,7 @@ CREATE TABLE name(
   lastname VARCHAR (30) NOT NULL,
   role_id INT NULL, 
   manager_id INT NULL,
-  PRIMARY KEY
+  PRIMARY KEY (id)
 );
 
 

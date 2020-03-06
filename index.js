@@ -40,7 +40,7 @@ function runSearch() {
         break;
 
       case "Find employess by departments":
-        multiSearch();
+       departmentSearch();
         break;
 
       case "Find employee with a specific role":
@@ -77,7 +77,7 @@ function employeeSearch() {
     });
 }
 
-function multiSearch() {
+function departmentSearch() {
   var query = "SELECT employee FROM employee GROUP BY employee HAVING count(*) > 1";
   connection.query(query, function(err, res) {
     if (err) throw err;

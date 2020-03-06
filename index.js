@@ -21,21 +21,21 @@ connection.connect(function(err) {
 
 function runSearch() {
   inquirer
-    .prompt({
+    .prompt([{
       name: "action",
       type: "list",
       message: "What would you like to do?",
       choices: [
+        "Find Employee",
         "Find employees by department",
-        "Find all employees",
         "Find employees by role",
         "Search for a specific employee",
         "exit"
       ]
-    })
+    }])
     .then(function(answer) {
       switch (answer.action) {
-      case "Find employee":
+      case "Find Employee":
         employeeSearch();
         break;
 
@@ -60,19 +60,19 @@ function runSearch() {
 
 function employeeSearch() {
   inquirer
-    .prompt({
+    .prompt([{
       name: "employee",
       type: "input",
       message: "Which employee would you like to search for?"
-    })
+    }])
     .then(function(answer) {
       var query = "SELECT position, employee, department FROM employees WHERE ?";
-      connection.query(query, { artist: answer.artist }, function(err, res) {
+      connection.query(query, { name: answer.employee}, function(err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
           console.log("Position: " + res[i].position + " || department: " + res[i].department + " || role: " + res[i].role);
         }
-        runSearch();
+      //  runSearch();
       });
     });
 }
@@ -88,7 +88,7 @@ function departmentSearch() {
       
       console.log(res[i].name);
     }
-    runSearch();
+   // runSearch();
   });
 }
 
@@ -134,33 +134,33 @@ function roleSearch() {
               res[i].name
           );
         }
-        runSearch();
+      //  runSearch();
       });
     });
 }
 
-function employeeSearch() {
-  inquirer
-    .prompt({
-      name: "employees",
-      type: "input",
-      message: "What employee info would you like to look for?"
-    })
-    .then(function(answer) {
-      console.log(answer.department);
-      connection.query("SELECT * FROM Employees WHERE ?", { department: answer.role }, function(err, res) {
-        if (err) throw err;
-        console.log(
-          "Position: " +
-            res[0].position +
-            " || department: " +
-            res[0].department +
-            " || role: " +
-            res[0].role +
-            " || name: " +
-            res[0].name
-        );
-        runSearch();
-      });
-    });
-}
+// function employeeSearch() {
+//   inquirer
+//     .prompt({
+//       name: "employees",
+//       type: "input",
+//       message: "What employee info would you like to look for?"
+//     })
+//     .then(function(answer) {
+//       console.log(answer.department);
+//       connection.query("SELECT * FROM Employees WHERE ?", { department: answer.role }, function(err, res) {
+//         if (err) throw err;
+//         console.log(
+//           "Position: " +
+//             res[0].position +
+//             " || department: " +
+//             res[0].department +
+//             " || role: " +
+//             res[0].role +
+//             " || name: " +
+//             res[0].name
+//         );
+//       //  runSearch();
+//       });
+//     });
+// }

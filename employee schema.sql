@@ -1,9 +1,10 @@
 
 USE employeeDB;
+DROP TABLE IF EXISTS department;
 
 CREATE TABLE department(
   id INT AUTO_INCREMENT, 
-  department VARCHAR(30) NOT NULL,
+  name VARCHAR(30) NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -25,13 +26,13 @@ CREATE TABLE name(
 );
 
 
-INSERT INTO department (department, role, name)
-VALUES ("IT", "Manager", "Alan");
+INSERT INTO department (name)
+VALUES ("IT");
 
-INSERT INTO role (department, role, name)
-VALUES ("HR", "Director", "Julie");
+INSERT INTO role (title,salary,department_id)
+VALUES ("Director",25,1);
 
-INSERT INTO name (department, role, name)
-VALUES ("Marketing", "Associate", "Kevin");
+INSERT INTO name ( firstname, lastname, role_id, manager_id)
+VALUES ("Alan","Burns",1, null );
 
 

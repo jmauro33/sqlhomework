@@ -3,10 +3,10 @@ var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
   host: "localhost",
- 
+
   port: 3306,
 
- 
+
   user: "root",
 
 
@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
   database: "employeeDB"
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
   if (err) throw err;
   runSearch();
 });
@@ -33,27 +33,27 @@ function runSearch() {
         "exit"
       ]
     }])
-    .then(function(answer) {
+    .then(function (answer) {
       switch (answer.action) {
-      case "Find Employee":
-        employeeSearch();
-        break;
+        case "Find Employee":
+          employeeSearch();
+          break;
 
-      case "Find employess by departments":
-       departmentSearch();
-        break;
+        case "Find employess by departments":
+          departmentSearch();
+          break;
 
-      case "Find employee with a specific role":
-        roleSearch();
-        break;
+        case "Find employee with a specific role":
+          roleSearch();
+          break;
 
-      case "Search for a specific employee":
-        employeeSearch();
-        break;
+        case "Search for a specific employee":
+          employeeSearch();
+          break;
 
-      case "exit":
-        connection.end();
-        break;
+        case "exit":
+          connection.end();
+          break;
       }
     });
 }
@@ -65,30 +65,30 @@ function employeeSearch() {
       type: "input",
       message: "Which employee would you like to search for?"
     }])
-    .then(function(answer) {
-      var query = "SELECT position, employee, department FROM employees WHERE ?";
-      connection.query(query, { name: answer.employee}, function(err, res) {
+    .then(function (answer) {
+      var query = "SELECT firstname, lastname, role_id FROM name WHERE ?";
+      connection.query(query, { firstname: answer.employee }, function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
           console.log("Position: " + res[i].position + " || department: " + res[i].department + " || role: " + res[i].role);
         }
-  runSearch();
+        runSearch();
       });
     });
 }
 
 function departmentSearch() {
   var query = "SELECT employee FROM employee GROUP BY employee HAVING count(*) > 1";
-  connection.query(query, function(err, res) {
+  connection.query(query, function (err, res) {
     if (err) throw err;
 
     console.log('Results:', res.length);
 
     for (var i = 0; i < res.length; i++) {
-      
+
       console.log(res[i].name);
     }
-   // runSearch();
+    runSearch();
   });
 }
 
@@ -99,7 +99,7 @@ function roleSearch() {
         name: "start",
         type: "input",
         message: "Enter starting position: ",
-        validate: function(value) {
+        validate: function (value) {
           if (isNaN(value) === false) {
             return true;
           }
@@ -110,7 +110,7 @@ function roleSearch() {
         name: "end",
         type: "input",
         message: "enter ending position: ",
-        validate: function(value) {
+        validate: function (value) {
           if (isNaN(value) === false) {
             return true;
           }
@@ -118,23 +118,23 @@ function roleSearch() {
         }
       }
     ])
-    .then(function(answer) {
+    .then(function (answer) {
       var query = "SELECT position,department,role,employee FROM employee WHERE position BETWEEN ? AND ?";
-      connection.query(query, [answer.start, answer.end], function(err, res) {
+      connection.query(query, [answer.start, answer.end], function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
           console.log(
             "Position: " +
-              res[i].position +
-              " || department: " +
-              res[i].department +
-              " || role: " +
-              res[i].role +
-              " || name: " +
-              res[i].name
+            res[i].position +
+            " || department: " +
+            res[i].department +
+            " || role: " +
+            res[i].role +
+            " || name: " +
+            res[i].name
           );
         }
-      //  runSearch();
+        runSearch();
       });
     });
 }

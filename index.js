@@ -3,13 +3,8 @@ var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
   host: "localhost",
-
   port: 3306,
-
-
   user: "root",
-
-
   password: "Viterbo",
   database: "employeeDB"
 });
@@ -27,9 +22,13 @@ function runSearch() {
       message: "What would you like to do?",
       choices: [
         "Find Employee",
-        "Find employees by department",
+        "View departments",
+        "View roles by department",
         "Find employees by role",
         "Search for a specific employee",
+        "Find employee with a specific role",
+        "Add a new employee",
+        "Add a new role",
         "exit"
       ]
     }])
@@ -39,8 +38,12 @@ function runSearch() {
           employeeSearch();
           break;
 
-        case "Find employess by departments":
+        case "View departments":
           departmentSearch();
+          break;
+
+        case "view roles by department":
+          departmentsearchbyRole();
           break;
 
         case "Find employee with a specific role":
@@ -48,12 +51,21 @@ function runSearch() {
           break;
 
         case "Search for a specific employee":
-          employeeSearch();
+          employeesearchbyName();
+          break;
+
+        case "Add a new employee":
+          addEmployee();
+          break;
+        case "Add a new role":
+          addRole();
           break;
 
         case "exit":
           connection.end();
           break;
+          default:
+          employeeSearch();  
       }
     });
 }
@@ -70,7 +82,7 @@ function employeeSearch() {
       connection.query(query, { firstname: answer.employee }, function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-          console.log("Position: " + res[i].position + " || department: " + res[i].department + " || role: " + res[i].role);
+          console.log("firstname: " + res[i].firstname + " || lastname: " + res[i].lastname + " || role_id: " + res[i].role_id);
         }
         runSearch();
       });
@@ -78,89 +90,139 @@ function employeeSearch() {
 }
 
 function departmentSearch() {
-  var query = "SELECT employee FROM employee GROUP BY employee HAVING count(*) > 1";
-  connection.query(query, function (err, res) {
-    if (err) throw err;
-
-    console.log('Results:', res.length);
-
-    for (var i = 0; i < res.length; i++) {
-
-      console.log(res[i].name);
-    }
-    runSearch();
-  });
+  // var query = "SELECT name, id FROM department";
+  // connection.query(query, function (err, res) {
+  //   if (err) throw err;
+  //  // for (var i = 0; i < res.length; i++) {
+  //  //   console.log(res[i].name);
+  //  // }
+  //   rolesearchbyDepartment(res);
+  // });
+    inquirer
+      .prompt({
+        name: "department",
+        type: "input",
+        message: "What department would you like to look for?"
+      })
+      .then(function(answer) {
+        console.log(answer.department);
+        connection.query("SELECT * FROM department WHERE ?", { name: answer.department}, function(err, res) {
+          if (err) throw err;
+         console.log(res);
+          runSearch();
+        });
+      });
+  
 }
 
 function roleSearch() {
   inquirer
-    .prompt([
-      {
-        name: "start",
-        type: "input",
-        message: "Enter starting position: ",
-        validate: function (value) {
-          if (isNaN(value) === false) {
-            return true;
-          }
-          return false;
-        }
-      },
-      {
-        name: "end",
-        type: "input",
-        message: "enter ending position: ",
-        validate: function (value) {
-          if (isNaN(value) === false) {
-            return true;
-          }
-          return false;
-        }
-      }
-    ])
-    .then(function (answer) {
-      var query = "SELECT position,department,role,employee FROM employee WHERE position BETWEEN ? AND ?";
-      connection.query(query, [answer.start, answer.end], function (err, res) {
+    .prompt({
+      name: "role",
+      type: "input",
+      message: "What role would you like to look for?"
+    })
+    .then(function(answer) {
+      console.log(answer.role);
+      connection.query("SELECT * FROM role WHERE ?", { title: answer.role}, function(err, res) {
         if (err) throw err;
-        for (var i = 0; i < res.length; i++) {
-          console.log(
-            "Position: " +
-            res[i].position +
-            " || department: " +
-            res[i].department +
-            " || role: " +
-            res[i].role +
-            " || name: " +
-            res[i].name
-          );
-        }
+       console.log(res);
+        runSearch();
+      });
+    });
+}
+      
+
+function departmentsearchbyRole(res) {
+  inquirer
+    .prompt({
+      name: "department",
+      type: "list",
+      choices: res,
+      message: "What department would you like to look for?"
+    })
+    .then(function(answer) {
+      console.log(answer.department);
+      connection.query("SELECT * FROM role WHERE ?", { department_id: answer.department }, function(err, res) {
+        if (err) throw err;
+       for (var i = 0; i < res.length; i++) {
+       console.log(res[i].firstname);
+       }
         runSearch();
       });
     });
 }
 
-// function employeeSearch() {
-//   inquirer
-//     .prompt({
-//       name: "employees",
-//       type: "input",
-//       message: "What employee info would you like to look for?"
-//     })
-//     .then(function(answer) {
-//       console.log(answer.department);
-//       connection.query("SELECT * FROM Employees WHERE ?", { department: answer.role }, function(err, res) {
-//         if (err) throw err;
-//         console.log(
-//           "Position: " +
-//             res[0].position +
-//             " || department: " +
-//             res[0].department +
-//             " || role: " +
-//             res[0].role +
-//             " || name: " +
-//             res[0].name
-//         );
-//       //  runSearch();
-//       });
-//     });
-// }
+function employeesearchbyName(res) {
+  inquirer
+    .prompt({
+      name: "firstname",
+      type: "list",
+      choices: res,
+      message: "Which employee would you like to look for?"
+    })
+    .then(function(answer) {
+      connection.query("SELECT * FROM name WHERE ?", { firstname: answer.firstname }, function(err, res) {
+        if (err) throw err;
+       for (var i = 0; i < res.length; i++) {
+       console.log(res[i].firstname);
+       }
+        runSearch();
+      });
+    });
+}
+
+function addEmployee(res) {
+  inquirer
+    .prompt([{
+      name: "firstname",
+      type: "input",
+      message: "Whats the employee's firstname?"
+    },{
+      name: "lastname",
+      type: "input",
+      message: "Whats the employee's lastname?"
+    },{
+      name: "manager_id",
+      type: "input",
+      message: "Whats the managers id?"
+    },{
+      name: "role_id",
+      type: "input",
+      message: "whats the role id?"
+    }])
+    .then(function(answer) {
+      connection.query("INSERT INTO name (firstname,lastname,manager_id,role_id) VALUES (?,?,?,?)", [answer.firstname,answer.lastname,answer.manager_id,answer.role_id], function(err, res) {
+        if (err) throw err;
+       for (var i = 0; i < res.length; i++) {
+       console.log(res[i].firstname);
+       }
+        runSearch();
+      });
+    });
+}
+function addRole(res) {
+  inquirer
+    .prompt([{
+      name: "title",
+      type: "input",
+      message: "Whats the title?"
+    },{
+      name: "manager_id",
+      type: "input",
+      message: "Whats the salary?"
+    },{
+      name: "department_id",
+      type: "input",
+      message: "whats the department id?"
+    }])
+    .then(function(answer) {
+      connection.query("INSERT INTO role (title,salary,department_id) VALUES (?,?,?)", [answer.title,answer.salary,answer.department_id], function(err, res) {
+        if (err) throw err;
+       for (var i = 0; i < res.length; i++) {
+       console.log(res[i].title);
+       }
+        runSearch();
+      });
+    });
+}

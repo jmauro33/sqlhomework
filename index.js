@@ -63,7 +63,7 @@ function runSearch() {
           break;
 
         case "Add a new department":
-          addRole();
+          addDepartment();
           break;
    
         case "exit":
@@ -231,7 +231,7 @@ function addRole(res) {
       });
     });
 }
-function addRole(res) {
+function addDepartment(res) {
   inquirer
     .prompt([{
       name: "name",
@@ -243,7 +243,7 @@ function addRole(res) {
       message: "whats the department id?"
     }])
     .then(function(answer) {
-      connection.query("INSERT INTO role (name,department_id) VALUES (?,?)", [answer.name,answer.department_id], function(err, res) {
+      connection.query("INSERT INTO department (name,department_id) VALUES (?,?)", [answer.name,answer.department_id], function(err, res) {
         if (err) throw err;
        for (var i = 0; i < res.length; i++) {
        console.log(res[i].title);

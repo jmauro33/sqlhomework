@@ -29,6 +29,7 @@ function runSearch() {
         "Find employee with a specific role",
         "Add a new employee",
         "Add a new role",
+        "Add a new department",
         "exit"
       ]
     }])
@@ -61,6 +62,10 @@ function runSearch() {
           addRole();
           break;
 
+        case "Add a new department":
+          addRole();
+          break;
+   
         case "exit":
           connection.end();
           break;
@@ -218,6 +223,27 @@ function addRole(res) {
     }])
     .then(function(answer) {
       connection.query("INSERT INTO role (title,salary,department_id) VALUES (?,?,?)", [answer.title,answer.salary,answer.department_id], function(err, res) {
+        if (err) throw err;
+       for (var i = 0; i < res.length; i++) {
+       console.log(res[i].title);
+       }
+        runSearch();
+      });
+    });
+}
+function addRole(res) {
+  inquirer
+    .prompt([{
+      name: "name",
+      type: "input",
+      message: "Whats the name?"
+    },{
+      name: "department_id",
+      type: "input",
+      message: "whats the department id?"
+    }])
+    .then(function(answer) {
+      connection.query("INSERT INTO role (name,department_id) VALUES (?,?)", [answer.name,answer.department_id], function(err, res) {
         if (err) throw err;
        for (var i = 0; i < res.length; i++) {
        console.log(res[i].title);

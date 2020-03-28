@@ -243,7 +243,7 @@ function addDepartment(res) {
       message: "whats the department id?"
     }])
     .then(function(answer) {
-      connection.query("INSERT INTO department (name,department_id) VALUES (?,?)", [answer.name,answer.department_id], function(err, res) {
+      connection.query("INSERT INTO department (name) VALUES (?)", [answer.name], function(err, res) {
         if (err) throw err;
        for (var i = 0; i < res.length; i++) {
        console.log(res[i].title);
